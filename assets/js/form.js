@@ -37,10 +37,16 @@
     };
   }
 
+  // Reglas de "no aplica" según estado
+  function triageAplica(estado) { return ["triada", "resuelta", "pagada"].indexOf((estado || "").toLowerCase()) >= 0; }
+  function pagoAplica(estado)   { return (estado || "").toLowerCase() === "pagada"; }
+
   function bloqueJS() {
     var estado = val("estado");
-    var pago = Number(val("pagoUSD") || 0);
-    if (estado.toLowerCase() !== "pagada") pago = 0;
+    var pago = pagoAplica(estado) ? Number(val("pagoUSD") || 0) : 0;
+    // Campos que no aplican se guardan vacíos
+    var fTriage = triageAplica(estado) ? val("fechaTriage") : "";
+    var fPago   = pagoAplica(estado)   ? val("fechaPago")   : "";
     var esPublico = val("esPublico") === "true";
     var id = val("id") || (y + "-001");
 
@@ -49,8 +55,8 @@
 "    id: " + jsStr(id) + ",\n" +
 "    fechaReporte: " + jsStr(val("fechaReporte")) + ",\n" +
 "    fechaPrimeraRespuesta: " + jsStr(val("fechaPrimeraRespuesta")) + ",\n" +
-"    fechaTriage: " + jsStr(val("fechaTriage")) + ",\n" +
-"    fechaPago: " + jsStr(val("fechaPago")) + ",\n" +
+"    fechaTriage: " + jsStr(fTriage) + ",\n" +
+"    fechaPago: " + jsStr(fPago) + ",\n" +
 "    plataforma: " + jsStr(val("plataforma")) + ",\n" +
 "    tipo: " + jsStr(val("tipo")) + ",\n" +
 "    titulo: " + jsStr(val("titulo")) + ",\n" +
@@ -169,6 +175,7 @@
       await guardarArchivo(c, nuevo, archivo.sha, msg);
       setStatus("✅ Guardado y commiteado. El tablero se actualiza en ~1 min (GitHub Pages). Reporte: " + rep.id, "ok");
       form.reset();
+      aplicarReglasUI();
     } catch (e) {
       setStatus("❌ " + e.message, "err");
     } finally {
@@ -192,7 +199,7 @@
   // el botón submit necesita un id para poder deshabilitarlo
   form.querySelector('button[type="submit"]').id = "btnGuardar";
 
-  document.getElementById("btnLimpiar").addEventListener("click", function () { form.reset(); status.hidden = true; });
+  document.getElementById("btnLimpiar").addEventListener("click", function () { form.reset(); status.hidden = true; aplicarReglasUI(); });
   document.getElementById("btnGuardarConfig").addEventListener("click", guardarConfig);
   document.getElementById("btnProbar").addEventListener("click", probarConexion);
   document.getElementById("btnBorrarToken").addEventListener("click", function () {
@@ -210,5 +217,34 @@
     }).catch(function () {});
   });
 
+  /* ---------- reglas visuales según estado (deshabilita lo que no aplica) ---------- */
+  function toggleCampo(name, aplica) {
+    var el = form.elements[name];
+    if (!el) return;
+    var field = el.closest ? el.closest(".field") : null;
+    el.disabled = !aplica;
+    if (!aplica) el.value = "";
+    if (field) {
+      field.classList.toggle("na", !aplica);
+      var tag = field.querySelector(".na-tag");
+      if (!aplica && !tag) {
+        tag = document.createElement("span");
+        tag.className = "na-tag";
+        tag.textContent = "· no aplica para este estado";
+        field.appendChild(tag);
+      } else if (aplica && tag) {
+        tag.remove();
+      }
+    }
+  }
+  function aplicarReglasUI() {
+    var estado = val("estado");
+    toggleCampo("fechaTriage", triageAplica(estado));
+    toggleCampo("fechaPago", pagoAplica(estado));
+    toggleCampo("pagoUSD", pagoAplica(estado));
+  }
+  document.getElementById("estadoSel").addEventListener("change", aplicarReglasUI);
+
   cargarConfig();
+  aplicarReglasUI();
 })();

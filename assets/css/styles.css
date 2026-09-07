@@ -196,6 +196,15 @@ a:hover { text-decoration: underline; }
 .tl-step .tl-label { font-family: var(--mono); font-size: 11px; color: var(--txt-dim); text-transform: uppercase; letter-spacing: .5px; }
 .tl-step .tl-date { font-family: var(--mono); font-size: 13px; color: var(--txt); margin-top: 2px; }
 .tl-step .tl-date.empty { color: var(--txt-mute); }
+.tl-step .tl-date.na { color: var(--txt-mute); font-style: italic; opacity: .7; }
+.tl-step.na .dot { border-style: dashed; opacity: .5; }
+
+/* campos deshabilitados en el formulario (no aplican al estado) */
+.field.na label { opacity: .45; }
+.field input:disabled, .field select:disabled {
+  opacity: .4; cursor: not-allowed; background: #0c1218;
+}
+.field .na-tag { font-size: 11px; color: var(--txt-mute); font-family: var(--mono); }
 
 /* ---------- Hall of fame ---------- */
 .hof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }

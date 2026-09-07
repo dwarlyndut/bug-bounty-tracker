@@ -281,19 +281,32 @@
     return '<span class="badge st-' + slug(e) + '">' + escapeHtml(e || "—") + '</span>';
   }
 
+  // ¿El paso aplica para este estado?
+  function pasoAplica(paso, estado) {
+    var e = slug(estado);
+    if (paso === "reporte" || paso === "respuesta") return true;
+    if (paso === "triage") return ["triada", "resuelta", "pagada"].indexOf(e) >= 0;
+    if (paso === "pago")   return e === "pagada";
+    return true;
+  }
+
   function timeline(r) {
     var pasos = [
-      { label: "Reporte", fecha: r.fechaReporte },
-      { label: "1ª resp.", fecha: r.fechaPrimeraRespuesta },
-      { label: "Triage", fecha: r.fechaTriage },
-      { label: "Pago", fecha: r.fechaPago }
+      { key: "reporte",   label: "Reporte",  fecha: r.fechaReporte },
+      { key: "respuesta", label: "1ª resp.", fecha: r.fechaPrimeraRespuesta },
+      { key: "triage",    label: "Triage",   fecha: r.fechaTriage },
+      { key: "pago",      label: "Pago",     fecha: r.fechaPago }
     ];
     return '<div class="timeline">' + pasos.map(function (p) {
-      var done = !!p.fecha;
-      return '<div class="tl-step ' + (done ? "done" : "") + '">' +
+      var aplica = pasoAplica(p.key, r.estado);
+      var done = aplica && !!p.fecha;
+      var cls = done ? "done" : (aplica ? "" : "na");
+      var texto = done ? p.fecha : (aplica ? "—" : "No aplica");
+      var dateCls = done ? "" : (aplica ? "empty" : "na");
+      return '<div class="tl-step ' + cls + '">' +
         '<div class="line"></div><div class="dot"></div>' +
         '<div class="tl-label">' + p.label + '</div>' +
-        '<div class="tl-date ' + (done ? "" : "empty") + '">' + (p.fecha || "—") + '</div></div>';
+        '<div class="tl-date ' + dateCls + '">' + texto + '</div></div>';
     }).join("") + '</div>';
   }
 
