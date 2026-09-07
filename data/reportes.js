@@ -34,6 +34,23 @@ window.PERFIL = {
  * -------------------------------------------------------------------------- */
 
 window.REPORTES = [
+  {
+    id: "2024-001",
+    fechaReporte: "2024-07-30",
+    fechaPrimeraRespuesta: "2024-08-08",
+    fechaTriage: "",
+    fechaPago: "",
+    plataforma: "HackerOne",
+    tipo: "Web",
+    titulo: "IDOR",
+    descripcion: "Se encontró un End Point que permite cambiar correos electrónicos, y estos cambios permiten ver foto de perfil, si se tiene o no se tiene activa la app mobile, si se tiene 2FA, esto también aplica para correos corporativos, es decir si tengo un correo corporativo puedo ver este tipo de información.",
+    severidad: "Media",
+    estado: "Duplicada",
+    pagoUSD: 0,
+    esPublico: true,
+    targetReal: "Notion",
+    targetPublico: ""
+  },
   /* ======= EJEMPLOS — bórralos y pon tus reportes reales ======= */
   {
     id: "2024-001",
