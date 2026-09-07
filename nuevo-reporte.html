@@ -16,7 +16,7 @@
         <div class="logo">＋</div>
         <div>
           <h1>Nuevo reporte</h1>
-          <div class="sub"><span class="prompt">reporter@parroquial</span>:~$ generar bloque de datos</div>
+          <div class="sub"><span class="prompt">reporter@parroquial</span>:~$ agregar reporte</div>
         </div>
       </div>
       <div class="header-actions">
@@ -116,15 +116,66 @@
 
         </div>
 
-        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="submit" class="btn primary">⚙ Generar bloque</button>
-          <button type="button" id="btnCopy" class="btn">⧉ Copiar</button>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <button type="submit" class="btn primary">💾 Agregar y guardar en GitHub</button>
+          <button type="button" id="btnLimpiar" class="btn">↺ Limpiar</button>
         </div>
+        <div id="status" class="save-status" hidden></div>
       </form>
-
-      <div class="section-title" style="margin-top:24px;">Pega esto en data/reportes.js (dentro de <code>window.REPORTES = [ ... ]</code>)</div>
-      <pre class="output" id="output">// completa el formulario y pulsa "Generar bloque"</pre>
     </div>
+
+    <!-- ===== Configuración de guardado en GitHub ===== -->
+    <details class="card gh-config" id="ghConfig">
+      <summary>⚙ Configuración de guardado en GitHub (necesario una vez)</summary>
+      <p class="hint" style="margin:10px 0 14px;">
+        Para que el botón "Agregar y guardar" haga el commit solo, pega aquí un
+        <b>token fine-grained</b> de GitHub con permiso <b>Contents: Read and write</b>
+        limitado <b>solo</b> a este repo. Se guarda en <b>este navegador</b> (localStorage),
+        nunca en el código. No lo uses en un PC compartido.
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Crear token ↗</a>
+      </p>
+      <div class="form-grid">
+        <div class="field full">
+          <label>GitHub token (fine-grained)</label>
+          <input id="ghToken" type="password" placeholder="github_pat_..." />
+        </div>
+        <div class="field">
+          <label>Owner</label>
+          <input id="ghOwner" value="dwarlyndut" />
+        </div>
+        <div class="field">
+          <label>Repo</label>
+          <input id="ghRepo" value="bug-bounty-tracker" />
+        </div>
+        <div class="field">
+          <label>Rama</label>
+          <input id="ghBranch" value="main" />
+        </div>
+        <div class="field">
+          <label>Archivo de datos</label>
+          <input id="ghPath" value="data/reportes.js" />
+        </div>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" id="btnGuardarConfig" class="btn">Guardar configuración</button>
+        <button type="button" id="btnProbar" class="btn">Probar conexión</button>
+        <button type="button" id="btnBorrarToken" class="btn">Borrar token</button>
+      </div>
+    </details>
+
+    <!-- ===== Fallback manual (copiar-pegar) ===== -->
+    <details class="card">
+      <summary>Alternativa manual (copiar-pegar)</summary>
+      <p class="hint" style="margin:10px 0;">
+        Si no quieres usar token: pulsa "Generar bloque", copia y pégalo dentro de
+        <code>window.REPORTES = [ ... ]</code> en <code>data/reportes.js</code>.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" id="btnGenerar" class="btn">⚙ Generar bloque</button>
+        <button type="button" id="btnCopy" class="btn">⧉ Copiar</button>
+      </div>
+      <pre class="output" id="output">// pulsa "Generar bloque"</pre>
+    </details>
 
     <footer>
       <span>Reporter: Parroquial</span>

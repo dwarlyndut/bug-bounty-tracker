@@ -237,6 +237,26 @@ footer {
   color: var(--neon); white-space: pre; overflow-x: auto; max-height: 340px;
 }
 
+/* ---------- Details / summary ---------- */
+details.card { margin-top: 16px; }
+details.card summary {
+  cursor: pointer; font-family: var(--mono); font-size: 13px; color: var(--cyan);
+  list-style: none; user-select: none;
+}
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary::before { content: "▸ "; color: var(--neon); }
+details.card[open] summary::before { content: "▾ "; }
+details.card summary:hover { color: var(--neon); }
+
+/* ---------- Save status ---------- */
+.save-status {
+  margin-top: 14px; padding: 10px 14px; border-radius: 8px;
+  font-family: var(--mono); font-size: 13px;
+  border: 1px solid var(--border-2); background: var(--bg-2); color: var(--txt);
+}
+.save-status.ok  { border-color: rgba(57,255,139,.5);  color: var(--neon); }
+.save-status.err { border-color: rgba(255,95,109,.5);  color: var(--red); }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .charts { grid-template-columns: 1fr; }
