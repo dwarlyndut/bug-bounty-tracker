@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuevo reporte · Bug Bounty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="logo">＋</div>
+        <div>
+          <h1>Nuevo reporte</h1>
+          <div class="sub"><span class="prompt">reporter@parroquial</span>:~$ generar bloque de datos</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn" href="index.html">← Volver al tablero</a>
+      </div>
+    </header>
+
+    <div class="card">
+      <form id="form" autocomplete="off">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>ID (única)</label>
+            <input name="id" id="autoId" placeholder="2026-001" />
+            <span class="hint">Formato sugerido: AÑO-NNN</span>
+          </div>
+          <div class="field">
+            <label>Plataforma</label>
+            <input name="plataforma" list="platsList" placeholder="HackerOne, Bugcrowd, Meta, Directo..." />
+            <datalist id="platsList">
+              <option>HackerOne</option><option>Bugcrowd</option>
+              <option>Meta</option><option>Intigriti</option>
+              <option>YesWeHack</option><option>Directo</option>
+            </datalist>
+          </div>
+
+          <div class="field">
+            <label>Tipo</label>
+            <select name="tipo">
+              <option>Web</option><option>Móvil</option><option>API</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Estado</label>
+            <select name="estado" id="estadoSel">
+              <option>Reportada</option><option>Triada</option><option>Resuelta</option>
+              <option>Duplicada</option><option>Pagada</option><option>Informativa</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Título de la vulnerabilidad</label>
+            <input name="titulo" placeholder="IDOR en endpoint de facturación" />
+          </div>
+
+          <div class="field full">
+            <label>Descripción</label>
+            <textarea name="descripcion" placeholder="Cómo lo encontraste, impacto, pasos..."></textarea>
+          </div>
+
+          <div class="field">
+            <label>Severidad</label>
+            <select name="severidad">
+              <option value="">—</option>
+              <option>Crítica</option><option>Alta</option><option>Media</option><option>Baja</option><option>Info</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Pago (USD) — solo si estado = Pagada</label>
+            <input name="pagoUSD" type="number" min="0" step="1" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label>¿Mostrar nombre real del target?</label>
+            <select name="esPublico">
+              <option value="false">No — mostrar nombre genérico (privado)</option>
+              <option value="true">Sí — mostrar nombre real (público)</option>
+            </select>
+          </div>
+          <div class="field"></div>
+
+          <div class="field">
+            <label>Target real (privado)</label>
+            <input name="targetReal" placeholder="Nombre real del programa" />
+          </div>
+          <div class="field">
+            <label>Target público (genérico)</label>
+            <input name="targetPublico" placeholder="Ej: Programa Fintech B" />
+          </div>
+
+          <div class="field">
+            <label>Fecha de reporte</label>
+            <input name="fechaReporte" type="date" />
+          </div>
+          <div class="field">
+            <label>Fecha 1ª respuesta</label>
+            <input name="fechaPrimeraRespuesta" type="date" />
+          </div>
+          <div class="field">
+            <label>Fecha de triage</label>
+            <input name="fechaTriage" type="date" />
+          </div>
+          <div class="field">
+            <label>Fecha de pago</label>
+            <input name="fechaPago" type="date" />
+          </div>
+
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="submit" class="btn primary">⚙ Generar bloque</button>
+          <button type="button" id="btnCopy" class="btn">⧉ Copiar</button>
+        </div>
+      </form>
+
+      <div class="section-title" style="margin-top:24px;">Pega esto en data/reportes.js (dentro de <code>window.REPORTES = [ ... ]</code>)</div>
+      <pre class="output" id="output">// completa el formulario y pulsa "Generar bloque"</pre>
+    </div>
+
+    <footer>
+      <span>Reporter: Parroquial</span>
+      <span>Recuerda: solo estado <b>Pagada</b> suma al dinero.</span>
+    </footer>
+  </div>
+
+  <script src="assets/js/form.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tablero Bug Bounty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="site-header">
+      <div class="brand">
+        <div class="logo">&gt;_</div>
+        <div>
+          <h1 id="brand-name">Bug Bounty Tracker</h1>
+          <div class="sub"><span class="prompt">reporter@</span><span id="brand-user">parroquial</span>:~$ reportes desde 2024</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn primary" href="nuevo-reporte.html">＋ Nuevo reporte</a>
+      </div>
+    </header>
+
+    <!-- KPIs -->
+    <div class="kpi-grid" id="kpis"></div>
+
+    <!-- Charts -->
+    <div class="section-title">Analítica</div>
+    <div class="charts">
+      <div class="card">
+        <h3>Pagos por mes (USD)</h3>
+        <div class="chart-box"><canvas id="chartMes"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Pagos por año (USD)</h3>
+        <div class="chart-box"><canvas id="chartAnio"></canvas></div>
+      </div>
+    </div>
+    <div class="charts" style="margin-top:16px;">
+      <div class="card">
+        <h3>Reportes por estado</h3>
+        <div class="chart-box small"><canvas id="chartEstado"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Reportes por tipo / plataforma</h3>
+        <div class="chart-box small"><canvas id="chartTipo"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="section-title">Reportes</div>
+    <div class="filters">
+      <select id="fAnio"><option value="">Todos los años</option></select>
+      <select id="fPlataforma"><option value="">Toda plataforma</option></select>
+      <select id="fTipo"><option value="">Todo tipo</option></select>
+      <select id="fEstado"><option value="">Todo estado</option></select>
+      <input id="fBuscar" type="text" placeholder="Buscar por target, título, descripción..." />
+      <span class="count" id="fCount"></span>
+    </div>
+
+    <div id="lista"></div>
+
+    <!-- Hall of fame -->
+    <div class="section-title">Salón de la Fama</div>
+    <div class="hof-grid" id="hof"></div>
+
+    <footer>
+      <span id="footReporter">Reporter: Parroquial</span>
+      <span>Tablero estático · datos en <code>data/reportes.js</code></span>
+    </footer>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="data/reportes.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
