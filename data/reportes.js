@@ -35,7 +35,7 @@ window.PERFIL = {
 
 window.REPORTES = [
   {
-    id: "2024-001",
+    id: "1",
     fechaReporte: "2024-07-30",
     fechaPrimeraRespuesta: "2024-08-08",
     fechaTriage: "",

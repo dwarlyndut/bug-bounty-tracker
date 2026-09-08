@@ -6,9 +6,6 @@
 (function () {
   "use strict";
 
-  var y = new Date().getFullYear();
-  document.getElementById("autoId").placeholder = y + "-001";
-
   var form   = document.getElementById("form");
   var out    = document.getElementById("output");
   var status = document.getElementById("status");
@@ -25,30 +22,27 @@
   function val(name) { var el = form.elements[name]; return el ? el.value.trim() : ""; }
   function jsStr(s)  { return JSON.stringify(s == null ? "" : String(s)); }
 
-  function construirReporte() {
-    var estado = val("estado");
-    var pago = Number(val("pagoUSD") || 0);
-    if (estado.toLowerCase() !== "pagada") pago = 0; // solo Pagada suma
-    return {
-      id: val("id") || (y + "-001"),
-      estado: estado,
-      pago: pago,
-      esPublico: val("esPublico") === "true"
-    };
-  }
-
   // Reglas de "no aplica" según estado
   function triageAplica(estado) { return ["triada", "resuelta", "pagada"].indexOf((estado || "").toLowerCase()) >= 0; }
   function pagoAplica(estado)   { return (estado || "").toLowerCase() === "pagada"; }
 
-  function bloqueJS() {
+  // Siguiente número correlativo a partir del contenido actual del archivo (1, 2, 3...)
+  function siguienteId(texto) {
+    var matches = texto.match(/id:\s*"(\d+)"/g) || [];
+    var nums = matches.map(function (s) { return parseInt(s.replace(/\D/g, ""), 10); });
+    var max = nums.length ? Math.max.apply(null, nums) : 0;
+    return String(max + 1);
+  }
+
+  // id: se autonumera al guardar en GitHub; en modo manual usa uno único no-numérico
+  function bloqueJS(id) {
     var estado = val("estado");
     var pago = pagoAplica(estado) ? Number(val("pagoUSD") || 0) : 0;
     // Campos que no aplican se guardan vacíos
     var fTriage = triageAplica(estado) ? val("fechaTriage") : "";
     var fPago   = pagoAplica(estado)   ? val("fechaPago")   : "";
     var esPublico = val("esPublico") === "true";
-    var id = val("id") || (y + "-001");
+    if (!id) id = "m" + Date.now().toString(36); // fallback manual (no rompe la secuencia)
 
     return "" +
 "  {\n" +
@@ -168,12 +162,12 @@
     setStatus("⏳ Guardando en GitHub...", "");
 
     try {
-      var rep = construirReporte();
       var archivo = await obtenerArchivo(c);
-      var nuevo = insertarReporte(archivo.texto, bloqueJS());
-      var msg = "Agregar reporte " + rep.id + (titulo ? (" — " + titulo) : "");
+      var id = siguienteId(archivo.texto);           // autonumeración 1, 2, 3...
+      var nuevo = insertarReporte(archivo.texto, bloqueJS(id));
+      var msg = "Agregar reporte #" + id + " — " + titulo;
       await guardarArchivo(c, nuevo, archivo.sha, msg);
-      setStatus("✅ Guardado y commiteado. El tablero se actualiza en ~1 min (GitHub Pages). Reporte: " + rep.id, "ok");
+      setStatus("✅ Guardado como reporte #" + id + ". El tablero se actualiza en ~1 min (GitHub Pages).", "ok");
       form.reset();
       aplicarReglasUI();
     } catch (e) {
